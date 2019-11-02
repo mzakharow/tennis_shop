@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Регистрация</title>
+{% endblock %}
+
+{% block cart %}
+    <div class="qty">{{ cart.item.count }}</div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'shop:login' %}">Вход</a></li>
+{% endblock %}
+
+{% block main %}
+    <h2 class="text-center">Вход пользователя</h2>
+    <div class="col-sm-8 col-sm-offset-2">
+        <form action='' method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="btn btn-success btn-block" value="Войти">
+        </form>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

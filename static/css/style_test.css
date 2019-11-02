@@ -1,0 +1,52 @@
+*{
+    margin: 0; /*внешний отступ*/
+    padding: 0; /*внутренний отступ*/
+    /*???  reset normolize ???*/
+}
+a{  /*ссылки*/
+    text-decoration: none;
+}
+li{  /*списки*/
+    text-decoration: none;
+    list-style: none;
+}
+body{
+    background: #fafafa;
+    font-family: 'Raleway', sans-serif;
+}
+.logo{
+    /*background: #fab574;*/
+    background: #000;
+    width: 100%;  /*ширина*/
+    display: flex;  /*определим что logo это flex контейнер*/
+    justify-content: center;  /*выравнивание элементов горизонтально*/
+}
+.graficlogo{
+    padding: 5px;
+    max-width: 100%; /*чтоб картинка была адаптивной*/
+    box-sizing: border-box; /*механизм который изменяет алгоритм расчета ширины и высоты*/
+}
+
+nav{
+    margin: auto;
+    width: 800px;
+    height: 100px;
+}
+.topnav{
+    background-color: #fafafa;
+    font-size: 14px;
+    margin-top: 30px; /*внешний отступ от верха*/
+}
+.topnav a{  /*стилезуем ссылки*/
+    color: #000;
+    text-align: center;
+    padding: 14px 16px; /*14px сверху, 16px слева-справа*/
+    font-size: 20px;
+}
+.topnav a:hover{  /*hover эффект*/
+    border-bottom: 3px solid #fab574;  /*solid сплошная рамка*/
+    /*background: #fab574;*/
+}
+.topnav .icon{
+    display: none;
+}

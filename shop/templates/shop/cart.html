@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Корзина ({{ cart.item.count }} товара в корзине)</title>
+{% endblock %}
+
+{% block cart %}
+    <div class="qty">{{ cart.item.count }}</div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'shop:cart' %}">Корзина</a></li>
+{% endblock %}
+
+{% block main %}
+{#    <h2>{{ cart }}</h2>#}
+    {% if cart.item.count > 0 %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Товар</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Цена</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in cart.item.all %}
+                <tr>
+                    <th scope="row"></th>
+                    <td><h4>{{ item.product.title }}</h4></td>
+                    <td>
+                        <form action="" method="get">
+                            <input type="number" name="qty" class="cart-item-qty" data-id="{{ item.id }}" value="{{ item.qty }}" min="1" style="width: 40px">
+                        </form>
+                    </td>
+                    <td><h5 id="cart-item-total-{{ item.id }}">{{ item.item_total }} руб.</h5></td>
+                    <td><a href='{% url 'shop:remove_from_cart' product_slug=item.product.slug %}'><button type="button" class="btn btn-danger">Удалить</button></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th></th>
+                <th>Итого:</th>
+                <th></th>
+                <th class="text" id="cart-total-price"><h4>{{ cart.cart_total }} руб.</h4></th>
+                <th></th>
+            </tr>
+            </tfoot>
+        </table>
+        <a href='{% url 'shop:create_order' %}'><button type="button" class="btn btn-success">Сделать заказ</button></a>
+    {% else %}
+        <h3>Ваша корзина пуста</h3>
+    {% endif %}
+
+    <br>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.cart-item-qty').on('click', function () {
+                qty = $(this).val()
+                item_id = $(this).attr('data-id')
+                data = {
+                    qty: qty,
+                    item_id: item_id
+                }
+                $.ajax({
+                    type: "GET",
+                    url: '{% url 'shop:change_item_qty' %}',
+                    data: data,
+                    success: function(data){
+                        $('#cart-item-total-'+item_id).html(parseFloat(data.item_total).toFixed(2) + ' руб.')
+                        $('#cart-total-price').html(parseFloat(data.cart_total_price).toFixed(2) + ' руб.')
+                    }
+                })
+            })
+        })
+
+    </script>
+
+    {#    <script src="{% static 'component/js/component.js' %}"></script>#}
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

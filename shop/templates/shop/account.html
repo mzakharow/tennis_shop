@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Заказы {{ request.user }}</title>
+{% endblock %}
+
+{% block cart %}
+    <div class="qty">{{ cart.item.count }}</div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'shop:account' %}">Личный кабинет</a></li>
+{% endblock %}
+
+{% block main %}
+    <h2 class="text-center">Личный кабинет пользователя {{ request.user }}</h2>
+    <hr>
+    <h3>Ваши заказы</h3>
+    <table class="table">
+    <tr style="background: #D10024">
+        <td class="text-center">Номер заказа</td>
+        <td class="text-center">Дата заказа</td>
+        <td class="text-center">Статус заказа</td>
+        <td class="text-center">Стоимость заказа</td>
+        <td class="text-center">Детали заказа</td>
+    </tr>
+    {% for item in order %}
+    <tr style="background: aliceblue">
+        <td class="text-center" style="padding-top:20px; padding-bottom: 20px;">{{ item.id }}</td>
+        <td class="text-center" style="padding-top:20px; padding-bottom: 20px;">{{ item.date }}</td>
+        <td class="text-center" style="padding-top:20px; padding-bottom: 20px;">{{ item.status }}</td>
+        <td class="text-center" style="padding-top:20px; padding-bottom: 20px;">{{ item.total }}</td>
+        <td class="text-center" style="padding-top:20px; padding-bottom: 20px;">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailModal-{{ item.id }}">
+                Подробнее
+            </button>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    <a href='{% url 'shop:logout' %}'><button type="button" class="btn btn-danger">Выход</button></a>
+
+    {% for items in order %}
+        <div class="modal fade" id="detailModal-{{ items.id }}" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="detailModalLabel">Детали заказа №{{ items.id }}</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Товар</th>
+                                <th scope="col">Количество</th>
+                                <th scope="col">Цена</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in items.items.item.all %}
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td><h4>{{ item.product }}</h4></td>
+                                    <td><h5>{{ item.qty }}</h5></td>
+                                    <td><h5 id="cart-item-total-{{ item.id }}">{{ item.item_total }} руб.</h5></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th></th>
+                                <th>Итого:</th>
+                                <th></th>
+                                <th class="text" id="cart-total-price"><h4>{{ items.total }} руб.</h4></th>
+                                <th></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                        <p><h5>Заказчик: </h5></p>
+                        {{ items.first_name }} {{ items.last_name }}
+
+                        <p><h5>Параметры заказа:</h5></p>
+                        {{ items.address }}
+
+                        <p><h5>Статус заказа: </h5></p>
+                        {{ items.status }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <script src="http://code.jquery.com/jquery-latest.js" ></script>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>{{ category.name }}</title>
+{% endblock %}
+
+{% block cart %}
+    <div class="qty">{{ cart.item.count }}</div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="../category/{{ category.slug }}">{{ category.name }}</a></li>
+{% endblock %}
+
+{% block main %}
+    <h2>{{ category.name }}</h2>
+
+    {% for product in products %}
+        <h2>{{ product.title }}</h2>
+        <h4><a href="{% url 'shop:product_detail' product.slug %}">{{ product.title }}</a></h4>
+    {% endfor %}
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

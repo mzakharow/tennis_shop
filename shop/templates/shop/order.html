@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{% endblock %}
+
+{% block cart %}
+    <div class="qty">{{ cart.item.count }}</div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="#">Заказ</a></li>
+{% endblock %}
+
+{% block main %}
+
+    <form action='{% url "shop:make_order" %}' method="POST">
+    {% csrf_token %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-7">
+                    <!-- Billing Details -->
+                    <div class="billing-details">
+                        <div class="section-title">
+                            <h3 class="title">Параметры доставки</h3>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Имя</label>
+                            <input type="text" name="name" required id="id_name" class="form-control" placeholder="{{ form.name.label }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Фамилия</label>
+                            <input type="text" name="last_name" id="id_last_name" class="form-control" placeholder="{{ form.last_name.label }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Телефон</label>
+                            <input type="text" name="phone" required id="id_phone" class="form-control" placeholder="{{ form.phone.label }}">
+                            <span class="helptext">Номер телефона в формате +79011234567</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Электронная почта</label>
+                            <input type="text" name="email" required id="id_email" class="form-control" placeholder="{{ form.email.label }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Дата доставки</label>
+                            <input type="date" name="date" id="id_date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="buying_type">Способ доставки </label>
+                            <select class="custom-select mr-sm-2" name="buying_type" id="id_buying_type">
+                                <option selected>...</option>
+                                <option value="self">Самовывоз</option>
+                                <option value="delivery">Доставка</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Адрес доставки</label>
+                            <input type="text" name="address" id="id_address" class="form-control" placeholder="{{ form.address.label }}">
+                            <span class="help text">{{ form.address.help_text }}</span>
+                        </div>
+                        <div class="order-notes">
+                            <label for="OrderNotes">Комментарий к заказу</label>
+                            <textarea class="input" name="comments" id="id_comments" placeholder="Укажите подробности доставки"></textarea>
+                        </div>
+                    </div>
+                    <!-- /Billing Details -->
+                </div>
+
+                <!-- Order Details -->
+                <div class="col-md-5 order-details">
+                    <div class="section-title text-center">
+                        <h3 class="title">Ваш заказ</h3>
+                    </div>
+                    <div class="order-summary">
+                        <div class="order-col">
+                            <div><strong>Товар</strong></div>
+                            <div><strong>Цена</strong></div>
+                        </div>
+                        <div class="order-products">
+                            {% for item in cart.item.all %}
+
+                                <div class="order-col">
+                                    <div>{{ item.qty }}x {{ item.product.title }}</div>
+                                    <div>{{ item.item_total }}</div>
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+                        <div class="order-col">
+                            <div>Доставка</div>
+                            <div><strong>Бесплатно</strong></div>
+                        </div>
+                        <div class="order-col">
+                            <div><strong>Всего (руб.)</strong></div>
+                            <div><strong class="order-total">{{ cart.cart_total }}</strong></div>
+                        </div>
+                    </div>
+                    <div class="payment-method">
+                        <div class="input-radio">
+                            <input type="radio" name="payment" id="payment-1">
+                            <label for="payment-1">
+                                <span></span>
+                                Оплата наличными курьеру
+                            </label>
+                            <div class="caption">
+                                <p>Заказ можно полатить наличными курьеру в момент получения.</p>
+                            </div>
+                        </div>
+                        <div class="input-radio">
+                            <input type="radio" name="payment" id="payment-2">
+                            <label for="payment-2">
+                                <span></span>
+                                Оплата картой курьеру
+                            </label>
+                            <div class="caption">
+                                <p>Заказ можно полатить банковской картой курьеру в момент получения.</p>
+                            </div>
+                        </div>
+                        <div class="input-radio">
+                            <input type="radio" name="payment" id="payment-3">
+                            <label for="payment-3">
+                                <span></span>
+                                Безналичная оплата
+                            </label>
+                            <div class="caption">
+                                <p>Заказ можно оплатить банковским переводом. В момент подтверждения заказа менеджер расскажет все подробности.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-checkbox">
+                        <input type="checkbox" id="terms">
+                        <label for="terms">
+                            <span></span>
+                            Я подтверждаю правильность заказа и выбранный способ оплаты
+                        </label>
+                    </div>
+                    <input type='submit' class='primary-btn order-submit' value='Оформить заказ'>
+                </div>
+                <!-- /Order Details -->
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <script>
+        <!--
+        function btnClick(a)
+        {
+            alert('hello' + a.value)
+            {#var Txt1 = "";#}
+            {#var Txt2 = "";#}
+            {#Txt1 = document.Test.bt.value;#}
+            {#Txt2 = document.Test.bt.name;#}
+            {#document.getElementById('ex1').innerHTML="<HR>"+#}
+            {#    "Вы нажали кнопку: " + Txt1.bold() +#}
+            {#    " с именем: "  + Txt2.bold() +"<HR>";#}
+        }
+        //-->
+    </script>
+
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

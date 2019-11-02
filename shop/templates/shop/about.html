@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>О Нас</title>
+{% endblock %}
+
+{% block cart %}
+    <div class="qty">{{ cart.item.count }}</div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'shop:about' %}">О Нас</a></li>
+{% endblock %}
+
+{% block main %}
+    <h2>О Нас</h2>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

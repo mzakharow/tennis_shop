@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>{{ product.brand }} {{ product.title }}</title>
+{% endblock %}
+
+{% block cart %}
+    <div class="qty">{{ cart.item.count }}</div>
+{% endblock %}
+
+{% block breadcrumb %}
+    {#    <div class="qty">{{ product.category.slug }} / {{ product.slug }}</div>#}
+    <li><a href="../category/{{ product.category.slug }}">{{ product.category }}</a></li>
+    <li><a href={{ product.slug }}>{{ product.title }}</a></li>
+{% endblock %}
+
+{% block main %}
+    <h2>{{ product.title }}</h2>
+    <img src="{{ product.image.url }}" alt="" style="width:200px">
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'shop:add_to_cart' product_slug=product.slug %}" class='add_to_cart' data-slug="{{ product.slug }}"><button>Добавить в корзину</button></a>
+    {% else %}
+        <p class='text-center'>Заказывать товар могут только зарегистрированные пользователи
+        <a href="{% url 'shop:login' %}" class='text-center'>Войдите</a> или <a href="{% url 'shop:registration' %}" class='text-center'>зарегистрируйтесь</a></p>
+    {% endif %}
+    <script>
+        {#alert("hi")#}
+    </script>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
