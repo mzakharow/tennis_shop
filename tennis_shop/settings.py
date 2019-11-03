@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'shop',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static',),)
 
 LOGIN_URL = '../registration' #  here I need a login form
+
+CART_SESSION_ID = 'cart'

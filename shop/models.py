@@ -31,14 +31,6 @@ class Brand(models.Model):
         return self.name
 
 
-# Переопределения менеджера модели
-# переделаем выборку запроса all, добавив фильтр
-# class ProductManager(models.Manager):
-#
-#     def all(self, *args, **kwargs):
-#         return super(ProductManager, self).get_queryset().filter(available=True)
-
-
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     brand = models.ForeignKey(Brand, on_delete=models.DO_NOTHING)
