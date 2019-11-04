@@ -35,7 +35,6 @@ def check_cart(request):
     return cart
 
 
-
 def base_view(request):
     categories = Category.objects.all()
     products = Product.objects.all().filter(available=True)
@@ -163,7 +162,6 @@ def order_create_view(request):
 
 
 def make_order_view(request):
-
     cart = check_cart(request)
     form = OrderForm(request.POST or None)
     categories = Category.objects.all()
@@ -256,7 +254,7 @@ def login_view(request):
         'cart': cart,
         'categories': categories
     }
-    return render(request, 'shop/login.html', context)
+    return render(request, 'account/login.html', context)
 
 
 class ListProductView(generics.ListAPIView):

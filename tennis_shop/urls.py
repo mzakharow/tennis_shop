@@ -3,11 +3,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 import shop.urls
+import account.urls
 from tennis_shop import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # include(r'^', include('shop.urls')),
+    path('account/', include(account.urls, namespace='account')),
     path('', include(shop.urls, namespace='shop')),
 ]
 

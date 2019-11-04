@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'account.apps.AccountConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,8 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'shop',
-    'cart',
+    'shop.apps.EcomappConfig',
 ]
 
 MIDDLEWARE = [
@@ -135,5 +135,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static',),)
 
 LOGIN_URL = '../registration' #  here I need a login form
-
-CART_SESSION_ID = 'cart'

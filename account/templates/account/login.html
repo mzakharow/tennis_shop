@@ -1,0 +1,74 @@
+{#{% extends "base.html" %}#}
+{#{% load static %}#}
+{#{% block title %}Log-in{% endblock %}#}
+{#{% block content %}#}
+{#    <h1>Log-in</h1>#}
+{#    <form action="." method="post">#}
+{#        {{ form.as_p }}#}
+{#        {% csrf_token %}#}
+{#        <p><input type="submit" value="Log in"></p>#}
+{#    </form>#}
+{##}
+{#    <form action="." method="post">#}
+{#        <div class="form-group">#}
+{#            <label for="exampleInputEmail1">Email address</label>#}
+{#            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">#}
+{#            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <label for="exampleInputPassword1">Password</label>#}
+{#            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">#}
+{#        </div>#}
+{#        <div class="form-check">#}
+{#            <input type="checkbox" class="form-check-input" id="exampleCheck1">#}
+{#            <label class="form-check-label" for="exampleCheck1">Check me out</label>#}
+{#        </div>#}
+{#        <button type="submit" class="btn btn-primary">Submit</button>#}
+{#    </form>#}
+{#{% endblock %}#}
+
+
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Регистрация</title>
+{% endblock %}
+
+{% block cart %}
+    <div class="qty">{{ cart.item.count }}</div>
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'shop:login' %}">Вход</a></li>
+{% endblock %}
+
+{% block main %}
+    <h2 class="text-center">Вход пользователя</h2>
+    <div class="col-sm-8 col-sm-offset-2">
+{#                <form action='' method="POST">#}
+{#                    {% csrf_token %}#}
+{#                    {{ form }}#}
+{#                    <input type="submit" class="btn btn-success btn-block" value="Войти">#}
+{#                </form>#}
+
+        <form action="." method="post">
+             {% csrf_token %}
+{#            {{ form }}#}
+{##}
+{#            {{ form.as_p }}#}
+            <div class="form-group">
+                <label for="exampleInputEmail1">Логин</label>
+                <input type="text" class="form-control" placeholder="First name" name="username" required id="id_username">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Пароль</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" required id="id_password">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
