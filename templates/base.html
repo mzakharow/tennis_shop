@@ -53,7 +53,7 @@
                     <ul class="header-links pull-right">
                         <li>
                             {% if not request.user.is_authenticated %}
-                                <a href="{% url 'shop:login' %}"><i class="fa fa-user-o"></i>Гость</a>
+                                <a href="{% url 'account:login' %}"><i class="fa fa-user-o"></i>Гость</a>
                             {% else %}
                                 <a href="{% url 'shop:account' %}"><i class="fa fa-user-o"></i>{{ request.user }}</a>
                             {% endif %}

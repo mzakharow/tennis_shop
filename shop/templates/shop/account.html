@@ -39,7 +39,7 @@
     {% endfor %}
     </table>
 
-    <a href='{% url 'shop:logout' %}'><button type="button" class="btn btn-danger">Выход</button></a>
+    <a href='{% url 'account:logout' %}'><button type="button" class="btn btn-danger">Выход</button></a>
 
     {% for items in order %}
         <div class="modal fade" id="detailModal-{{ items.id }}" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
