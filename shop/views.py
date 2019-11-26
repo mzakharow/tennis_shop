@@ -12,16 +12,6 @@ from .serializer import ProductSerializer
 
 
 def check_cart(request):
-    # try:
-    #     cart_id = request.session['cart_id']
-    #     cart = Cart.objects.get(id=cart_id)
-    #     request.session['total'] = cart.item.count()
-    # except:
-    #     cart = Cart()
-    #     cart.save()
-    #     cart_id = cart.id
-    #     request.session['cart_id'] = cart_id
-    #     cart = Cart.objects.get(id=cart_id)
     cart_id = request.session.get('cart_id')
     if cart_id is not None:
         cart = Cart.objects.get(id=cart_id)
@@ -221,23 +211,6 @@ def account_view(request):
         'order': order,
     }
     return render(request, 'shop/account.html', context)
-
-
-def registration_view(request):
-    form = RegistrationForm(request.POST or None)
-    cart = check_cart(request)
-    categories = Category.objects.all()
-    if form.is_valid():
-        form.save()
-        user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-        login(request, user=user)
-        return HttpResponseRedirect(reverse('shop:base'))
-    context = {
-        'form': form,
-        'cart': cart,
-        'categories': categories
-    }
-    return render(request, 'shop/registration.html', context)
 
 
 def login_view(request):

@@ -13,12 +13,52 @@
 {% endblock %}
 
 {% block main %}
-    <h2 class="text-center">Регистрация нового пользователя</h2>
     <div class="col-sm-8 col-sm-offset-2">
         <form action='' method="POST">
             {% csrf_token %}
-            {{ form }}
-            <input type="submit" class="btn btn-success btn-block" value="Зарегистрироваться">
+            {% if request.user.is_authenticated %}
+                <div class="form-group">
+                    <h2 class="text-center">Вы уже зарегистрированы как {{ request.user }}</h2>
+                    <div style="text-align:center">
+                        <a href='{% url 'shop:logout' %}'><button type="button" class="btn btn-danger">Выход</button></a>
+                    </div>
+                </div>
+            {% else %}
+                <h2 class="text-center">Регистрация нового пользователя</h2>
+
+                <div class="form-group">
+                    <label for="id_username">Логин</label>
+                    <input type="text" class="form-control" placeholder="Login" name="username" required id="id_username">
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Пароль</label>
+                    <input type="password" class="form-control" placeholder="Password" name="password" required id="id_password">
+                </div>
+                <div class="form-group">
+                    <label for="id_password_check">Повторите пароль</label>
+                    <input type="password" class="form-control" placeholder="Password" name="password_check" required id="id_password_check">
+                </div>
+                <div class="form-group">
+                    <label for="id_first_name">Имя</label>
+                    <input type="text" class="form-control" placeholder="First name" name="first_name" required id="id_first_name">
+                </div>
+                <div class="form-group">
+                    <label for="id_last_name">Фамилия</label>
+                    <input type="text" class="form-control" placeholder="Last name" name="last_name" required id="id_last_name">
+                </div>
+                <div class="form-group">
+                    <label for="id_email">Email</label>
+                    <input type="email" class="form-control" placeholder="Email" name="email" required id="id_email">
+                </div>
+                <input type="submit" class="btn btn-success btn-block" value="Зарегистрироваться">
+                {#                <div class="form-group">#}
+                {#                    <label for="exampleInputPassword1">Пароль</label>#}
+                {#                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" required id="id_password">#}
+                {#                </div>#}
+                {#                <button type="submit" class="btn btn-primary">Войти</button>#}
+{#                {{ form }}#}
+{#                <input type="submit" class="btn btn-success btn-block" value="Зарегистрироваться">#}
+            {% endif %}
         </form>
     </div>
 {% endblock %}

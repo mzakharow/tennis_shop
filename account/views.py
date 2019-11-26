@@ -1,25 +1,14 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 
+from shop.forms import RegistrationForm
 from shop.models import Cart, Category
 from .forms import LoginForm
-
-
-def check_cart(request):
-    cart_id = request.session.get('cart_id')
-    if cart_id is not None:
-        cart = Cart.objects.get(id=cart_id)
-        request.session['total'] = cart.item.count()
-    else:
-        cart = Cart()
-        cart.save()
-        cart_id = cart.id
-        request.session['cart_id'] = cart_id
-        cart = Cart.objects.get(id=cart_id)
-    return cart
+from shop.views import check_cart
 
 
 def user_login(request):
@@ -43,3 +32,32 @@ def user_login(request):
         'categories': categories
     }
     return render(request, 'account/login.html', context)
+
+
+def registration_view(request):
+    form = RegistrationForm(request.POST or None)
+    cart = check_cart(request)
+    categories = Category.objects.all()
+    if form.is_valid():
+        new_user = form.save(commit=False)
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        email = form.cleaned_data['email']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        new_user.username = username
+        new_user.set_password(password)
+        new_user.first_name = first_name
+        new_user.last_name = last_name
+        new_user.email = email
+        new_user.save()
+        login_user = authenticate(username=username, password=password)
+        if login_user:
+            login(request, login_user)
+            return HttpResponseRedirect(reverse('shop:base'))
+    context = {
+        'form': form,
+        'cart': cart,
+        'categories': categories
+    }
+    return render(request, 'account/registration.html', context)

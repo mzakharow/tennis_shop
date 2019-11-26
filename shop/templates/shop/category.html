@@ -16,8 +16,11 @@
     <h2>{{ category.name }}</h2>
 
     {% for product in products %}
-        <h2>{{ product.title }}</h2>
-        <h4><a href="{% url 'shop:product_detail' product.slug %}">{{ product.title }}</a></h4>
+{#        <h2>{{ product.title }}</h2>#}
+        <div class="shop-img">
+            <a href="{% url 'shop:product_detail' product.slug %}"><img src="{{ product.image.url }}" alt=""></a>
+        </div>
+        <h4 class="text-left"><a href="{% url 'shop:product_detail' product.slug %}">{{ product.title }}</a></h4>
     {% endfor %}
 {% endblock %}
 
