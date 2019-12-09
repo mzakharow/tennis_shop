@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from shop.models import Category, Product, Cart, CartItem, Order
@@ -27,11 +28,13 @@ def check_cart(request):
 
 def base_view(request):
     categories = Category.objects.all()
-    products = Product.objects.all().filter(available=True)
+    new_products = Product.objects.filter(available=True)[0:3]
+    best_products = Product.objects.filter(price__gte=3000)[0:3]
     cart = check_cart(request)
     context = {
         'categories': categories,
-        'products': products,
+        'new_products': new_products,
+        'best_products': best_products,
         'cart': cart
     }
     return render(request, 'shop/index.html', context)
@@ -76,15 +79,22 @@ def product_view(request, product_slug):
 
 def category_view(request, category_slug):
     category = Category.objects.get(slug=category_slug)
-    # products = Product.objects.filter(category=category)
-    products = category.product_set.all()  # product_set переменная обратного класса в django
+    products = Product.objects.filter(category=category)
+    # products = category.product_set.all()  # product_set переменная обратного класса в django
     categories = Category.objects.all()
     cart = check_cart(request)
+    paginator = Paginator(products, 4)
+    if 'page' in request.GET:
+        page_num = request.GET['page']
+    else:
+        page_num = 1
+    pages = paginator.get_page(page_num)
     context = {
         'category': category,
         'products': products,
         'categories': categories,
         'cart': cart,
+        'pages': pages,
     }
     return render(request, 'shop/category.html', context)
 
@@ -200,34 +210,21 @@ def make_order_view(request):
     return render(request, 'shop/order.html', context)
 
 
-@login_required
-def account_view(request):
-    order = Order.objects.filter(user=request.user).order_by('-id')
-    categories = Category.objects.all()
-    cart = check_cart(request)
-    context = {
-        'categories': categories,
-        'cart': cart,
-        'order': order,
-    }
-    return render(request, 'shop/account.html', context)
-
-
-def login_view(request):
-    form = LoginForm(request.POST or None)
-    cart = check_cart(request)
-    categories = Category.objects.all()
-    if form.is_valid():
-        # user = authenticate(username=request.POST['username'], password=request.POST['password'])
-        user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-        login(request, user=user)
-        return HttpResponseRedirect(reverse('shop:base'))
-    context = {
-        'form': form,
-        'cart': cart,
-        'categories': categories
-    }
-    return render(request, 'account/login.html', context)
+# def login_view(request):
+#     form = LoginForm(request.POST or None)
+#     cart = check_cart(request)
+#     categories = Category.objects.all()
+#     if form.is_valid():
+#         # user = authenticate(username=request.POST['username'], password=request.POST['password'])
+#         user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+#         login(request, user=user)
+#         return HttpResponseRedirect(reverse('shop:base'))
+#     context = {
+#         'form': form,
+#         'cart': cart,
+#         'categories': categories
+#     }
+#     return render(request, 'account/login.html', context)
 
 
 class ListProductView(generics.ListAPIView):
@@ -236,3 +233,16 @@ class ListProductView(generics.ListAPIView):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+# @login_required
+# def account_view(request):
+#     order = Order.objects.filter(user=request.user).order_by('-id')
+#     categories = Category.objects.all()
+#     cart = check_cart(request)
+#     context = {
+#         'categories': categories,
+#         'cart': cart,
+#         'order': order,
+#     }
+#     return render(request, 'shop/account.html', context)

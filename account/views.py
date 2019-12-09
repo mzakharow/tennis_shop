@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,7 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.urls import reverse
 
 from shop.forms import RegistrationForm
-from shop.models import Cart, Category
+from shop.models import Cart, Category, Order
 from .forms import LoginForm
 from shop.views import check_cart
 
@@ -61,3 +62,16 @@ def registration_view(request):
         'categories': categories
     }
     return render(request, 'account/registration.html', context)
+
+
+@login_required
+def account_view(request):
+    order = Order.objects.filter(user=request.user).order_by('-id')
+    categories = Category.objects.all()
+    cart = check_cart(request)
+    context = {
+        'categories': categories,
+        'cart': cart,
+        'order': order,
+    }
+    return render(request, 'account/account.html', context)

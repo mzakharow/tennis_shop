@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <li><a href="{% url 'shop:login' %}">Вход</a></li>
+    <li><a href="{% url 'account:login' %}">Вход</a></li>
 {% endblock %}
 
 {% block main %}
@@ -20,7 +20,7 @@
             {% if request.user.is_authenticated %}
                 <div class="form-group">
                     <h2 class="text-center">Вы вошли как {{ request.user }}</h2>
-                    <a href='{% url 'shop:logout' %}'><button type="button" class="btn btn-danger">Выход</button></a>
+                    <a href='{% url 'account:logout' %}'><button type="button" class="btn btn-danger">Выход</button></a>
                 </div>
             {% else %}
                 <h2 class="text-center">Вход пользователя</h2>
@@ -33,7 +33,6 @@
                     <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" required id="id_password">
                 </div>
                 <button type="submit" class="btn btn-primary">Войти</button>
-
             {% endif %}
 
         </form>

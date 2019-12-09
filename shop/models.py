@@ -39,9 +39,13 @@ class Product(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to=image_folder)
     price = models.DecimalField(max_digits=9, decimal_places=2)   # max_digits количество знаков ;  decimal_places после запятой
+    quantity = models.PositiveIntegerField(blank=True, default=0)
     # size = models.IntegerField(max_length=2)
     available = models.BooleanField(default=True)
     # objects = ProductManager()   # Переопределения менеджера модели
+
+    class Meta:
+        ordering = ['-id']
 
     def __str__(self):
         return self.title

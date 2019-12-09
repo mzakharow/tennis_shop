@@ -14,9 +14,10 @@ from shop.views import (base_view,
                         order_create_view,
                         contact_view,
                         about_view,
-                        account_view,
-                        login_view,
+                        # account_view,
+                        # login_view,
                         ListProductView)
+# from account.views import account_view
 
 app_name = 'shop'
 
@@ -32,10 +33,10 @@ urlpatterns = [
     path('cart/', cart_view, name='cart'),
     path('contact/', contact_view, name='contact'),
     path('about/', about_view, name='about'),
-    path('account/', account_view, name='account'),
+    # path('account/', account_view, name='account'),
     # path('registration/', registration_view, name='registration'),
-    path('login/', login_view, name='login'),
-    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    # path('login/', login_view, name='login'),
+    # path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('products/', ListProductView.as_view(), name="product-all"),
     path(r'', base_view, name='base'),
 ]
