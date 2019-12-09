@@ -1,6 +1,6 @@
 amqp==2.5.1
 billiard==3.6.1.0
-Django==2.2.8
+Django==3.0
 djangorestframework==3.10.3
 importlib-metadata==0.23
 kombu==4.6.5
