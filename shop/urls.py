@@ -14,9 +14,9 @@ from shop.views import (base_view,
                         order_create_view,
                         contact_view,
                         about_view,
-                        # account_view,
-                        # login_view,
-                        ListProductView)
+    # account_view,
+    # login_view,
+                        ListProductView, api_products, test_api_products)
 # from account.views import account_view
 
 app_name = 'shop'
@@ -38,5 +38,7 @@ urlpatterns = [
     # path('login/', login_view, name='login'),
     # path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('products/', ListProductView.as_view(), name="product-all"),
+    path('api/products/test/', test_api_products),
+    path('api/products/', api_products),
     path(r'', base_view, name='base'),
 ]

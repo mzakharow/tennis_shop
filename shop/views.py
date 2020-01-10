@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from shop.models import Category, Product, Cart, CartItem, Order
 from django.urls import reverse
 from shop.forms import OrderForm, RegistrationForm, LoginForm
@@ -234,6 +237,17 @@ class ListProductView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+
+@api_view(['GET'])
+def api_products(request):
+    if request.method == "GET":
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+
+def test_api_products(request):
+    return render(request, 'shop/products.html')
 
 # @login_required
 # def account_view(request):
