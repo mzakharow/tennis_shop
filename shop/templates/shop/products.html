@@ -1,12 +1,25 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="C:\Users\m.zakharov\PycharmProjects\tennis_shop\shop\templates\shop\products.js"></script>
+{#    <script src="C:\Users\m.zakharov\PycharmProjects\tennis_shop\shop\templates\shop\products.js"></script>#}
+        <script src="../../../static/js/products.js"></script>
     <title>Список товаров</title>
 </head>
 <body>
     <div id="list"></div>
-2
+
+    <from id="product_from" method="post">
+        <input type="hidden" name="id" id="id">
+        <p>Название: <input name="name" id="name"></p>
+        <p>Порядок:
+            <input type="number" name="order" id="order" value="0">
+        </p>
+        <p>
+            <input type="reset" value="Очистить">
+            <input type="sebmit" value="Сохранить">
+        </p>
+    </from>
 </body>
 </html>

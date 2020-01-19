@@ -246,6 +246,14 @@ def api_products(request):
         return Response(serializer.data)
 
 
+@api_view(['GET'])
+def api_product_detail(request, pk):
+    if request.method == 'GET':
+        product = Product.objects.get(pk=pk)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
+
 def test_api_products(request):
     return render(request, 'shop/products.html')
 
