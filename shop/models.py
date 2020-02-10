@@ -6,14 +6,14 @@ from django.db import models
 
 
 def image_folder(instance, filename):
-    filename = instance.slug + '.' + filename.split('.')[1]    # filename.split('.')[1]- расширение файла
-    # return "{0}/{1}".format(instance.slug, filename)
+    filename = instance.slug + '.' + filename.split('.')[1]
     return f'{instance.slug}/{filename}'    #   попробовать такой формат
 
 
 class Category(models.Model):
     name = models.CharField(max_length=64)
     image = models.ImageField(upload_to=image_folder)
+    available = models.BooleanField(default=True, blank=True)
     slug = models.SlugField(blank=True, unique=True)
 
     def __str__(self):
@@ -42,7 +42,6 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(blank=True, default=0)
     # size = models.IntegerField(max_length=2)
     available = models.BooleanField(default=True)
-    # objects = ProductManager()   # Переопределения менеджера модели
 
     class Meta:
         ordering = ['-id']

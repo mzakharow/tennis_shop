@@ -76,24 +76,24 @@
 								</a>
 							</div>
 						</div>
-						<!-- /LOGO -->
+                        <!-- /LOGO -->
 
-						<!-- SEARCH BAR -->
-						<div class="col-md-6">
-							<div class="header-search">
-								<form>
+                        <!-- SEARCH BAR -->
+                        <div class="col-md-6">
+                            <div class="header-search">
+                                <form>
                                     <select class="input-select">
                                         <option value="0">Все разделы</option>
-                                        {% for category in categories %}
+                                        {% for category in category_list %}
                                             <option value="{{ category.slug }}">{{ category.name }}</option>
                                         {% endfor %}
                                     </select>
                                     <input class="input" placeholder="Поиск">
                                     <button class="search-btn">Искать</button>
-								</form>
-							</div>
-						</div>
-						<!-- /SEARCH BAR -->
+                                </form>
+                            </div>
+                        </div>
+                        <!-- /SEARCH BAR -->
 
 						<!-- ACCOUNT -->
 						<div class="col-md-3 clearfix">
@@ -103,7 +103,6 @@
 									<a href="{% url 'shop:cart' %}">
 										<i class="fa fa-shopping-cart"></i>
 										<span>Корзина</span>
-{#										{% block cart %}0{% endblock %}#}
                                         <div class="qty">{{ cart.item.count }}</div>
 									</a>
 								</div>
@@ -138,7 +137,7 @@
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
 						<li class="active"><a href="../">Главная</a></li>
-                        {% for category in categories %}
+                        {% for category in category_list %}
                             <li><a href="/category/{{ category.slug }}">{{ category.name }}</a></li>
                         {% endfor %}
 						<li><a href="{% url 'shop:contact' %}">Контакты</a></li>
@@ -243,7 +242,7 @@
                             <div class="footer">
                                 <h3 class="footer-title">Категории</h3>
                                 <ul class="footer-links">
-                                    {% for category in categories %}
+                                    {% for category in category_list %}
                                         <li><a href="/category/{{ category.slug }}">{{ category.name }}</a></li>
                                     {% endfor %}
                                 </ul>

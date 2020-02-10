@@ -4,10 +4,6 @@
     <title>{{ category.name }}</title>
 {% endblock %}
 
-{% block cart %}
-    <div class="qty">{{ cart.item.count }}</div>
-{% endblock %}
-
 {% block breadcrumb %}
     <li><a href="../category/{{ category.slug }}">{{ category.name }}</a></li>
 {% endblock %}

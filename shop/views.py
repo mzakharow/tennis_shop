@@ -1,6 +1,4 @@
 from decimal import Decimal
-
-from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
@@ -23,19 +21,15 @@ def check_cart(request):
     else:
         cart = Cart()
         cart.save()
-        cart_id = cart.id
-        request.session['cart_id'] = cart_id
-        cart = Cart.objects.get(id=cart_id)
+        request.session['cart_id'] = cart.id
     return cart
 
 
 def base_view(request):
-    categories = Category.objects.all()
     new_products = Product.objects.filter(available=True)[0:3]
     best_products = Product.objects.filter(price__gte=3000)[0:3]
     cart = check_cart(request)
     context = {
-        'categories': categories,
         'new_products': new_products,
         'best_products': best_products,
         'cart': cart
@@ -44,11 +38,9 @@ def base_view(request):
 
 
 def contact_view(request):
-    categories = Category.objects.all()
     products = Product.objects.all().filter(available=True)
     cart = check_cart(request)
     context = {
-        'categories': categories,
         'products': products,
         'cart': cart
     }
@@ -56,11 +48,9 @@ def contact_view(request):
 
 
 def about_view(request):
-    categories = Category.objects.all()
     products = Product.objects.all().filter(available=True)
     cart = check_cart(request)
     context = {
-        'categories': categories,
         'products': products,
         'cart': cart
     }
@@ -71,10 +61,8 @@ def about_view(request):
 def product_view(request, product_slug):
     cart = check_cart(request)
     product = Product.objects.get(slug=product_slug)
-    categories = Category.objects.all()
     context = {
         'product': product,
-        'categories': categories,
         'cart': cart,
     }
     return render(request, 'shop/product.html', context)
@@ -103,11 +91,9 @@ def category_view(request, category_slug):
 
 
 def cart_view(request):
-    categories = Category.objects.all()
     cart = check_cart(request)
     context = {
         'cart': cart,
-        'categories': categories
     }
     return render(request, 'shop/cart.html', context)
 
@@ -149,17 +135,17 @@ def change_item_qty(request):
     # cart.cart_total = new_cart_total
     # cart.save()
     cart.change_qty(qty, item_id)
-    return JsonResponse({'cart_total': cart.item.count(), 'item_total': cart_item.item_total, 'cart_total_price': cart.cart_total})
+    return JsonResponse({'cart_total': cart.item.count(),
+                         'item_total': cart_item.item_total,
+                         'cart_total_price': cart.cart_total})
 
 
 def order_create_view(request):
     cart = check_cart(request)
     form = OrderForm(request.POST or None)
-    categories = Category.objects.all()
     context = {
         'cart': cart,
         'form': form,
-        'categories': categories
     }
     return render(request, 'shop/order.html', context)
 
@@ -167,11 +153,9 @@ def order_create_view(request):
 def make_order_view(request):
     cart = check_cart(request)
     form = OrderForm(request.POST or None)
-    categories = Category.objects.all()
     context = {
         'cart': cart,
         'form': form,
-        'categories': categories
     }
     if form.is_valid():
         name = form.cleaned_data['name']
@@ -213,39 +197,9 @@ def make_order_view(request):
     return render(request, 'shop/order.html', context)
 
 
-# def login_view(request):
-#     form = LoginForm(request.POST or None)
-#     cart = check_cart(request)
-#     categories = Category.objects.all()
-#     if form.is_valid():
-#         # user = authenticate(username=request.POST['username'], password=request.POST['password'])
-#         user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-#         login(request, user=user)
-#         return HttpResponseRedirect(reverse('shop:base'))
-#     context = {
-#         'form': form,
-#         'cart': cart,
-#         'categories': categories
-#     }
-#     return render(request, 'account/login.html', context)
-
-
 class ListProductView(generics.ListAPIView):
     """
     Providers a get method handler.
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-
-
-# @login_required
-# def account_view(request):
-#     order = Order.objects.filter(user=request.user).order_by('-id')
-#     categories = Category.objects.all()
-#     cart = check_cart(request)
-#     context = {
-#         'categories': categories,
-#         'cart': cart,
-#         'order': order,
-#     }
-#     return render(request, 'shop/account.html', context)
