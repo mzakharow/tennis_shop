@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from shop.models import Category, Product, Cart, CartItem, Order, Brand
 from django.urls import reverse
-from shop.forms import OrderForm, RegistrationForm, LoginForm
+from shop.forms import OrderForm
 from rest_framework import generics, status
 from .serializer import ProductSerializer, BrandSerializer
 

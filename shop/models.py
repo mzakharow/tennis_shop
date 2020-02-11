@@ -1,13 +1,11 @@
 from decimal import Decimal
-
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
 
 def image_folder(instance, filename):
     filename = instance.slug + '.' + filename.split('.')[1]
-    return f'{instance.slug}/{filename}'    #   попробовать такой формат
+    return f'{instance.slug}/{filename}'
 
 
 class Category(models.Model):
@@ -38,9 +36,9 @@ class Product(models.Model):
     slug = models.SlugField(unique=True, default='')
     description = models.TextField()
     image = models.ImageField(upload_to=image_folder)
-    price = models.DecimalField(max_digits=9, decimal_places=2)   # max_digits количество знаков ;  decimal_places после запятой
+    price = models.DecimalField(max_digits=9, decimal_places=2)
     quantity = models.PositiveIntegerField(blank=True, default=0)
-    # size = models.IntegerField(max_length=2)
+    # size = models.IntegerField(max_length=2, blank=True, default=0)
     available = models.BooleanField(default=True)
 
     class Meta:
@@ -98,13 +96,6 @@ class Cart(models.Model):
         cart.save()
 
 
-# class Address(models.Model):
-#     full = models.CharField(max_length=128)
-#
-#     def __str__(self):
-#         return str(self.full)
-
-
 ORDER_STATUS_CHOICES = (
     ('Принят в обработку', 'Принят в обработку'),
     ('Выполняется', 'Выполняется'),
@@ -118,9 +109,7 @@ BUYING_TYPE_CHOICES = (
 
 
 class Order(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    # items = models.ManyToManyField(Cart)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ForeignKey(Cart, on_delete=models.CASCADE)
     total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     first_name = models.CharField(max_length=128)
@@ -135,3 +124,7 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Заказ №{str(self.id)}'
+
+
+class Email(models.Model):
+    address = models.EmailField(max_length=128, unique=True)

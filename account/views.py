@@ -4,15 +4,13 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.urls import reverse
 
-from shop.forms import RegistrationForm
 from shop.models import Cart, Category, Order
-from .forms import LoginForm
+from .forms import LoginForm, RegistrationForm
 from shop.views import check_cart
 
 
 def user_login(request):
     cart = check_cart(request)
-    categories = Category.objects.all()
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -28,7 +26,6 @@ def user_login(request):
     context = {
         'form': LoginForm(request.POST),
         'cart': cart,
-        'categories': categories
     }
     return render(request, 'account/login.html', context)
 
@@ -36,7 +33,6 @@ def user_login(request):
 def registration_view(request):
     form = RegistrationForm(request.POST or None)
     cart = check_cart(request)
-    categories = Category.objects.all()
     if form.is_valid():
         new_user = form.save(commit=False)
         username = form.cleaned_data['username']
@@ -57,7 +53,6 @@ def registration_view(request):
     context = {
         'form': form,
         'cart': cart,
-        'categories': categories
     }
     return render(request, 'account/registration.html', context)
 
@@ -65,10 +60,8 @@ def registration_view(request):
 @login_required
 def account_view(request):
     order = Order.objects.filter(user=request.user).order_by('-id')
-    categories = Category.objects.all()
     cart = check_cart(request)
     context = {
-        'categories': categories,
         'cart': cart,
         'order': order,
     }

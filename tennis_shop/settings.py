@@ -108,10 +108,18 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # AUTH_USER_MODEL = 'customauth.MyUser'
 
-AUTHENTICATION_BACKEND = [
+AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'account.authentication.EmailAuthBackend',
 ]
+
+
+# Email settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'smolgu.bureau.website@gmail.com'
+EMAIL_HOST_PASSWORD = '*******'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 
 # Internationalization
@@ -127,18 +135,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static_in_dev'),
-# )
 
 STATIC_URL = '/static/'
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
