@@ -72,7 +72,7 @@ def category_view(request, category_slug):
     category = Category.objects.get(slug=category_slug)
     products = Product.objects.filter(category=category)
     # products = category.product_set.all()  # product_set переменная обратного класса в django
-    categories = Category.objects.all()
+    categories = Category.objects.filter(available=True)
     cart = check_cart(request)
     paginator = Paginator(products, 4)
     if 'page' in request.GET:
