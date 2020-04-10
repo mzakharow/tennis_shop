@@ -3,6 +3,7 @@ from django.urls import path
 from django.contrib.auth.views import LogoutView
 from django.views.generic import TemplateView
 
+from . import views
 from shop.views import (base_view,
                         product_view,
                         category_view,
@@ -21,8 +22,9 @@ from shop.views import (base_view,
 
 app_name = 'shop'
 
-
 urlpatterns = [
+    path(r'', base_view, name='base'),
+    path("filter/", views.FilterBrandView.as_view(), name='filter'),
     path('category/<slug:category_slug>', category_view, name='category_detail'),
     path('product/<slug:product_slug>', product_view, name='product_detail'),
     path('add_to_cart/<slug:product_slug>', add_to_cart_view, name='add_to_cart'),
@@ -44,5 +46,4 @@ urlpatterns = [
     # path('api/products/', api_products),
     # path('api/brands/<int:pk>/', api_brand_detail),
     # path('api/brands/', api_brands),
-    path(r'', base_view, name='base'),
 ]

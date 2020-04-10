@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.views.generic import ListView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -11,6 +12,11 @@ from django.urls import reverse
 from shop.forms import OrderForm
 from rest_framework import generics, status
 from .serializer import ProductSerializer, BrandSerializer
+
+
+class FilterBrand:
+    def get_brand(self):
+        return Product.objects.all().values("brand")
 
 
 def check_cart(request):
@@ -70,8 +76,12 @@ def product_view(request, product_slug):
 
 def category_view(request, category_slug):
     category = Category.objects.get(slug=category_slug)
-    products = Product.objects.filter(category=category)
+    if request.method == "POST":
+        products = Product.objects.filter(category=category).filter(brand=request.POST.get("brand"))
+    else:
+        products = Product.objects.filter(category=category)
     # products = category.product_set.all()  # product_set переменная обратного класса в django
+    brands = Brand.objects.all()
     categories = Category.objects.filter(available=True)
     cart = check_cart(request)
     paginator = Paginator(products, 4)
@@ -80,9 +90,11 @@ def category_view(request, category_slug):
     else:
         page_num = 1
     pages = paginator.get_page(page_num)
+
     context = {
         'category': category,
         'products': products,
+        'brands': brands,
         'categories': categories,
         'cart': cart,
         'pages': pages,
@@ -203,3 +215,9 @@ class ListProductView(generics.ListAPIView):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+class FilterBrandView(FilterBrand, ListView):
+    def get_queryset(self):
+        queryset = Product.objects.filter(brand__in=self.request.GET.getlist("brand"))
+        return queryset
