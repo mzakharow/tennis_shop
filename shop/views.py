@@ -4,8 +4,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+
 
 from shop.models import Category, Product, Cart, CartItem, Order, Brand
 from django.urls import reverse
@@ -77,10 +76,10 @@ def product_view(request, product_slug):
 def category_view(request, category_slug):
     category = Category.objects.get(slug=category_slug)
     if request.method == "POST":
-        products = Product.objects.filter(category=category).filter(brand=request.POST.get("brand"))
+        # products = Product.objects.filter(category=category).filter(brand=request.POST.get("brand"))
+        products = Product.objects.filter(category=category).filter(brand__in=request.POST.getlist("brand"))
     else:
         products = Product.objects.filter(category=category)
-    # products = category.product_set.all()  # product_set переменная обратного класса в django
     brands = Brand.objects.all()
     categories = Category.objects.filter(available=True)
     cart = check_cart(request)
@@ -113,7 +112,10 @@ def cart_view(request):
 def add_to_cart_view(request, product_slug):
     cart = check_cart(request)
     product = Product.objects.get(slug=product_slug)
-    cart.add_to_cart(product.slug)
+    if 'qty' in request.POST:
+        cart.add_to_cart(product.slug, int(request.POST.get("qty")))
+    else:
+        cart.add_to_cart(product.slug)
     new_cart_total = 0.00
     for item in cart.item.all():
         new_cart_total += float(item.item_total)
@@ -140,12 +142,6 @@ def change_item_qty(request):
     item_id = request.GET.get('item_id')
     cart_item = CartItem.objects.get(id=int(item_id))
     cart_item.item_total = int(qty) * Decimal(cart_item.product.price)
-    # cart_item.save()
-    # new_cart_total = 0.00
-    # for item in cart.item.all():
-    #     new_cart_total += float(item.item_total)
-    # cart.cart_total = new_cart_total
-    # cart.save()
     cart.change_qty(qty, item_id)
     return JsonResponse({'cart_total': cart.item.count(),
                          'item_total': cart_item.item_total,

@@ -1,6 +1,7 @@
 from decimal import Decimal
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 def image_folder(instance, filename):
@@ -17,9 +18,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    # def get_absolute_url(self):
-    #     # return reverse('category_detail', args=self.slug)
-    #     return reverse('category_detail', kwargs={'category_slug': self.slug})
+    def get_absolute_url(self):
+        # return reverse('shop:category_detail', args=self.slug)
+        return reverse('shop:category_detail', kwargs={'category_slug': self.slug})
 
 
 class Brand(models.Model):
@@ -67,10 +68,10 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
-    def add_to_cart(self, product_slug):
+    def add_to_cart(self, product_slug, qty=1):
         cart = self
         product = Product.objects.get(slug=product_slug)
-        new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price)
+        new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price, qty=qty)
         if new_item not in cart.item.all():
             cart.item.add(new_item)
             cart.save()
