@@ -81,18 +81,40 @@
                         <!-- SEARCH BAR -->
                         <div class="col-md-6">
                             <div class="header-search">
-                                <form>
+                                <form action='{% url "shop:search_results" %}' method="POST">
+                                {% csrf_token %}
                                     <select class="input-select">
                                         <option value="0">Все разделы</option>
                                         {% for category in category_list %}
-                                            <option value="{{ category.slug }}">{{ category.name }}</option>
+                                            <option value="{{ category.slug }}" name="test">{{ category.name }}</option>
                                         {% endfor %}
                                     </select>
-                                    <input class="input" placeholder="Поиск">
+                                    <input class="input" name="test" placeholder="Поиск">
                                     <button class="search-btn">Искать</button>
                                 </form>
                             </div>
                         </div>
+
+{#                        <div class="col-md-6">#}
+{##}
+{#                            <div class="header-search">#}
+{#                                <form action='{% url "shop:search_results" %}' method="POST">#}
+{#                                    {% csrf_token %}#}
+{#                                    <select class="input-select">#}
+{#                                        <option value="0">Все разделы</option>#}
+{#                                        {% for category in category_list %}#}
+{#                                            <option value="{{ category.slug }}" name="test">{{ category.name }}</option>#}
+                                            {#                                            <input type="text" name="test" value="{{ category.slug }}" />#}
+{#                                            <input type="text" name="test">#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                    <input class="input" name="test" placeholder="Поиск">#}
+{#                                    <button class="search-btn">Искать</button>#}
+{#                                </form>#}
+{#                            </div>#}
+{##}
+{#                        </div>#}
+
                         <!-- /SEARCH BAR -->
 
 						<!-- ACCOUNT -->
@@ -257,9 +279,7 @@
 								<ul class="footer-links">
 									<li><a href="/">Глачная</a></li>
 									<li><a href="{% url 'shop:contact' %}">Контакты</a></li>
-{#									<li><a href="{% url 'shop:about' %}">О Нас</a></li>#}
 									<li><a href="{% url 'shop:cart' %}">Корзина</a></li>
-{#									<li><a href="{% url 'shop:account' %}">Личный кабинет</a></li>#}
 								</ul>
 							</div>
 						</div>

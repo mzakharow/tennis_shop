@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load products_tag %}
+
+{% block title %}
+    <title>Результаты поиска</title>
+{% endblock %}
+
+{% block main %}
+{#    <h2>{{ category.name }}</h2>#}
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <div class="row">
+                {% if products.all.count == 0 %}
+                    <div><h3>Поиск не дал результата</h3></div>
+                {% else %}
+                    <div id="store" class="col-md-9">
+                        <div class="row">
+                            <!-- product -->
+                            {% for page in pages %}
+                                <div class="col-md-4 col-xs-6">
+                                    <div class="product">
+
+                                        <div class="product-img">
+                                            <img src="{{ page.image.url }}" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">{{ page.brand.name }}</p>
+                                            <h3 class="product-name"><a href="{% url 'shop:product_detail' page.slug %}">{{ page.title }}</a></h3>
+                                            <h4 class="product-price">{{ page.price }} руб.</h4>
+                                        </div>
+                                        <div class="add-to-cart">
+                                            <a href="{% url 'shop:add_to_cart' product_slug=page.slug %}"><button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> купить</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="clearfix visible-sm visible-xs"></div>
+                        </div>
+                    </div>
+                    <div class="store-filter clearfix">
+                        <span class="store-qty">На текущей старнице {{ pages.object_list|length }} из {{ pages.paginator.count }} товаров</span>
+                        <ul class="store-pagination">
+                            {% for count in  pages.paginator.page_range %}
+                                <li><a href="?page={{ count }}">{{ count }}</a></li>
+                            {% endfor %}
+                            {% if pages.has_next %}
+                                <li><a href="?page={{ pages.next_page_number }}"><i class="fa fa-angle-right"></i></a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}

@@ -71,9 +71,21 @@ class Cart(models.Model):
     def add_to_cart(self, product_slug, qty=1):
         cart = self
         product = Product.objects.get(slug=product_slug)
-        new_item, _ = CartItem.objects.get_or_create(product=product, item_total=product.price, qty=qty)
-        if new_item not in cart.item.all():
-            cart.item.add(new_item)
+        cart_item, _ = CartItem.objects.filter(cart__item__cart=cart).get_or_create(product=product)
+        if cart_item not in cart.item.all():
+            cart_item.qty = int(qty)
+            cart_item.item_total = int(qty) * Decimal(cart_item.product.price)
+            cart_item.save()
+            cart.item.add(cart_item)
+            cart.save()
+        else:
+            cart_item.qty += int(qty)
+            cart_item.item_total += int(qty) * Decimal(cart_item.product.price)
+            cart_item.save()
+            new_cart_total = 0.00
+            for item in cart.item.all():
+                new_cart_total += float(item.item_total)
+            cart.cart_total = new_cart_total
             cart.save()
 
     def remove_from_cart(self, product_slug):

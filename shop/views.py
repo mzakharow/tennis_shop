@@ -205,6 +205,29 @@ def make_order_view(request):
     return render(request, 'shop/order.html', context)
 
 
+def search_results_view(request):
+    products = []
+    if request.method == "POST":
+        products = Product.objects.filter(title__icontains=request.POST.get('test'))
+    brands = Brand.objects.all()
+    cart = check_cart(request)
+    paginator = Paginator(products, 4)
+    if 'page' in request.GET:
+        page_num = request.GET['page']
+    else:
+        page_num = 1
+    pages = paginator.get_page(page_num)
+
+    context = {
+        'products': products,
+        'brands': brands,
+        # 'categories': categories,
+        'cart': cart,
+        'pages': pages,
+    }
+    return render(request, 'shop/search_results.html', context)
+
+
 class ListProductView(generics.ListAPIView):
     """
     Providers a get method handler.
