@@ -53,6 +53,7 @@
                         <li>
                             {% if not request.user.is_authenticated %}
                                 <a href="{% url 'account:login' %}"><i class="fa fa-user-o"></i>Гость</a>
+                                <a href="{% url 'account:registration' %}"><i></i>Регистрация</a>
                             {% else %}
                                 <a href="{% url 'account:account' %}"><i class="fa fa-user-o"></i>{{ request.user }}</a>
                             {% endif %}
@@ -163,7 +164,6 @@
                             <li><a href="/category/{{ category.slug }}">{{ category.name }}</a></li>
                         {% endfor %}
 						<li><a href="{% url 'shop:contact' %}">Контакты</a></li>
-{#						<li><a href="{% url 'shop:about' %}">О Нас</a></li>#}
 					</ul>
 					<!-- /NAV -->
 				</div>
