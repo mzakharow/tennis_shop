@@ -3,7 +3,7 @@ asgiref==3.2.7
 billiard==3.6.1.0
 Django==3.0.6
 django-cors-headers==3.3.0
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 importlib-metadata==0.23
 kombu==4.6.5
 more-itertools==7.2.0
